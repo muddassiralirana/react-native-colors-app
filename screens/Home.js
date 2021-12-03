@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCallback, useEffect, useState} from 'react';
 
-import {FlatList, ScrollView, StyleSheet, View} from 'react-native';
+import {FlatList, ScrollView, StyleSheet, View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import PalettePreview from '../components/PalettePreview';
 
@@ -48,6 +48,13 @@ const Home = ({navigation}) => {
       )}
       refreshing={isRefreshing}
       onRefresh={handleRefresh}
+      ListHeaderComponent={
+        <TouchableOpacity
+        style={styles.button}
+        onPress={()=> navigation.navigate("AddNewPalette")}>
+          <Text style={styles.buttonText} >Modal</Text>
+        </TouchableOpacity>
+      }
     />
   );
 };
@@ -57,6 +64,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: 'white',
+  },
+  button: {
+    height: 50,
+    backgroundColor: 'white',
+    padding: 10,
+  },
+  buttonText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'teal',
   },
 });
 
