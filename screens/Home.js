@@ -1,20 +1,20 @@
 import React from 'react';
 import {useCallback, useEffect, useState} from 'react';
-
-import {FlatList, ScrollView, StyleSheet, View, Text} from 'react-native';
+import {FlatList, StyleSheet, View, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import PalettePreview from '../components/PalettePreview';
 
-const Home = ({navigation}) => {
-  const [palettes, setPlettes] = useState([]);
-  const [isRefreshing, setOIsRefreshing]= useState(false);
+const Home = ({ navigation, route }) => {
+  const newPalette = route.params ? route.params.newPalette : null;
+  const [palettes, setPalettes] = useState([]);
+  const [isRefreshing, setIsRefreshing]= useState(false);
   const handleFetchPalettes = useCallback(async () => {
     const response = await fetch(
       'https://color-palette-api.kadikraman.vercel.app/palettes',
     );
     if (response.ok) {
       const palettes = await response.json();
-      setPlettes(palettes);
+      setPalettes(palettes);
     }
   }, []);
 
@@ -25,13 +25,19 @@ const Home = ({navigation}) => {
   const handleRefresh = useCallback(
     async() => {
       
-      setOIsRefreshing(true);
+      setIsRefreshing(true);
       await handleFetchPalettes();
       setTimeout(()=>{
-        setOIsRefreshing(false)
+        setIsRefreshing(false)
 
       },1000);
     },[])
+
+    useEffect(() => {
+      if (newPalette) {
+        setPalettes(current => [newPalette, ...current]);
+      }
+    }, [newPalette]);
 
  
 
@@ -52,7 +58,7 @@ const Home = ({navigation}) => {
         <TouchableOpacity
         style={styles.button}
         onPress={()=> navigation.navigate("AddNewPalette")}>
-          <Text style={styles.buttonText} >Modal</Text>
+          <Text style={styles.buttonText} >Add New color Palettes ..</Text>
         </TouchableOpacity>
       }
     />
